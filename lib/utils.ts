@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
+  contact,
   footer,
   hello,
   help,
@@ -9,20 +10,25 @@ import {
   theme,
   whatis,
   template,
+  projects,
 } from "@/lib/cmd";
 
 export function cn(...inputs: string[]) {
   return twMerge(clsx(inputs));
 }
 
-export function command(cmd: string) {
+export function command(cmd: string): string[] {
   switch (cmd.toLowerCase()) {
     case "help":
       return help;
+    case "contact":
+      return contact;
     case "whatis":
       return whatis;
     case "theme":
       return theme;
+    case "projects":
+      return projects;
     case "social":
       return social;
     case "resume":

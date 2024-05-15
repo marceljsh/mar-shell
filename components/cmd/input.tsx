@@ -1,21 +1,28 @@
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
+'use client'
+
+import { useEffect, useState } from 'react'
+
+// CMDs
 import Header from '@/components/cmd/header'
 import { command } from '@/lib/utils'
 
-type OutputProps = {
+interface OutputProps {
   output: string[]
   history: string
   doneLoading: () => void
 }
 
-const Output = ({ output, history, doneLoading }: OutputProps) => {
-  const [displayedLines, setDisplayedLines] = useState<
-    { text: string; fullText: string }[]
-  >([])
+const Output: React.FC<OutputProps> = ({ output, history, doneLoading }) => {
+  interface DisplayLine {
+    text: string
+    fullText: string
+  }
+
+  const [displayedLines, setDisplayedLines] = useState<DisplayLine[]>([])
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDisplayedLines(output.map((line) => ({ text: '', fullText: line })))
+      setDisplayedLines(output.map(line => ({ text: '', fullText: line })))
     }, 0)
 
     return () => clearTimeout(timer)
@@ -24,8 +31,8 @@ const Output = ({ output, history, doneLoading }: OutputProps) => {
   useEffect(() => {
     let interval: NodeJS.Timeout
     const updateLines = () => {
-      setDisplayedLines((prevLines) =>
-        prevLines.map((line) =>
+      setDisplayedLines(prevLines =>
+        prevLines.map(line =>
           line.text.length < line.fullText.length
             ? { ...line, text: line.fullText.slice(0, line.text.length + 1) }
             : line
@@ -33,30 +40,38 @@ const Output = ({ output, history, doneLoading }: OutputProps) => {
       )
     }
 
-    if (displayedLines.some((line) => line.text !== line.fullText)) {
-      interval = setInterval(updateLines, 100)
-    } else if (displayedLines.every((line) => line.text === line.fullText)) {
+    if (displayedLines.some(line => line.text !== line.fullText)) {
+      interval = setInterval(updateLines, 0.1)
+    } else if (displayedLines.some(line => line.text === line.fullText)) {
       doneLoading()
     }
 
     return () => clearInterval(interval)
-  }, [displayedLines, doneLoading])
+  }, [displayedLines])
+
+  const scrollToBottom = () => {
+    const textarea = document.getElementById('command') as HTMLInputElement
+    if (textarea) {
+      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
 
   useEffect(() => {
-    const textarea = document.getElementById('command')
-    textarea?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    scrollToBottom()
   }, [displayedLines])
 
   return (
     <div className='flex flex-col'>
       <div className='flex items-start py-2'>
         <Header />
-        <span className='dark:text-[#32cd32] text-clamp'>{history}</span>
+        <span className='dark:text-[#32cd32] [font-size:_clamp(10px,3vw,14px)]'>
+          {history}
+        </span>
       </div>
       {displayedLines.map((line, index) => (
         <pre
           key={index}
-          className='dark:text-[#32cd32] text-clamp md:pl-4 py-4'
+          className='dark:text-[#32cd32] [font-size:_clamp(10px,3vw,14px)] md:pl-4 py-4'
           dangerouslySetInnerHTML={{ __html: line.text }}
         />
       ))}
@@ -64,13 +79,13 @@ const Output = ({ output, history, doneLoading }: OutputProps) => {
   )
 }
 
-const CommandPrompt = () => {
+const CommandPrompt: React.FC = () => {
   const [cmd, setCmd] = useState<string>('')
-  const [outputs, setOutputs] = useState<string[][]>([])
+  const [outputs, setOutputs] = useState<string[]>([])
   const [history, setHistory] = useState<string[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCmd(event.target.value)
   }
 
@@ -88,19 +103,30 @@ const CommandPrompt = () => {
     document.body.style.opacity = '0'
     const output = command('theme')
     setTimeout(() => {
-      setOutputs((prevOutputs) => [...prevOutputs, output])
-      setHistory((prevHistory) => [...prevHistory, 'theme'])
+      setOutputs(prevOutputs => [...prevOutputs, output])
+      setHistory([...history, 'theme'])
       setCmd('')
       document.body.classList.toggle('dark')
       document.body.style.opacity = '1'
     }, 500)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('marceljoshua69@gmail.com')
+    const output = command('contact')
+    setOutputs(prevOutputs => [...prevOutputs, output])
+    setHistory([...history, cmd])
+    setCmd('')
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
     if (loading) return
 
+    // This handles your cmd input based on the cmd
+    // You can make the function here or import it from lib/utils.js
+    // Personally i separate the function to lib/utils.js
     if (cmd === '') {
       return
     } else if (cmd === 'clear' || cmd === 'cls') {
@@ -112,16 +138,19 @@ const CommandPrompt = () => {
     } else if (cmd === 'theme') {
       handleThemeChange()
       return setLoading(false)
+    } else if (cmd === 'contact') {
+      handleCopyEmail()
+      return setLoading(false)
     } else {
       const output = command(cmd)
-      setOutputs((prevOutputs) => [...prevOutputs, output])
-      setHistory((prevHistory) => [...prevHistory, cmd])
+      setOutputs(prevOutputs => [...prevOutputs, output])
+      setHistory([...history, cmd])
       setCmd('')
     }
   }
 
   return (
-    <div className='dark:text-[#32cd32] text-clamp w-full max-w-lg flex flex-col'>
+    <div className='dark:text-[#32cd32] [font-size:_clamp(10px,3vw,14px)] w-full max-w-lg flex flex-col'>
       <div className='flex flex-col w-full pt-6'>
         {outputs.map((output, index) => (
           <Output
@@ -141,7 +170,7 @@ const CommandPrompt = () => {
           id='command'
           value={cmd}
           onChange={handleChange}
-          autoFocus
+          autoFocus={true}
         />
       </form>
     </div>
