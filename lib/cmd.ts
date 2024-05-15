@@ -13,10 +13,11 @@ const help = [`\
 <span class="text-neon-red dark:text-neon-yellow">clear, cls</span>      Clear the commands
 `];
 
-const whatis = [
-  `<span class="text-neon-red dark:text-neon-yellow">Mar-Shell</span> is a terminal-styled (Shell) portfolio template built with Next.
-It is inspired by the terminal design of the 90s.`,
-];
+const whois = [`\
+Name           <span class="text-neon-red dark:text-neon-yellow">Marcel Joshua</span>
+Title          <span class="text-neon-red dark:text-neon-yellow">Software Engineer</span>
+Location       <span class="text-neon-red dark:text-neon-yellow">North Sumatra, ID</span>
+`];
 
 const theme = [
   `<span class="text-neon-red dark:text-neon-yellow">Theme changed</span>`,
@@ -35,7 +36,7 @@ const social = [
 github        <a target="_blank" href="https://github.com/marceljsh"><span class="text-neon-red dark:text-neon-yellow">https://github.com/marceljsh</span></a>
 linkedin      <a target="_blank" href="https://linkedin.com/in/marceljsh"><span class="text-neon-red dark:text-neon-yellow">https://linkedin.com/in/marceljsh</span></a>
 instagram     <a target="_blank" href="https://instagram.com/marceljsh"><span class="text-neon-red dark:text-neon-yellow">https://instagram.com/marceljsh</span></a>
-Portfolio     <a target="_blank" href="https://marceljsh.vercel.app"><span class="text-neon-red dark:text-neon-yellow">https://marceljsh.vercel.app</span></a>`,
+portfolio     <a target="_blank" href="https://marceljsh.vercel.app"><span class="text-neon-red dark:text-neon-yellow">https://marceljsh.vercel.app</span></a>`,
 ];
 
 const template = [
@@ -55,6 +56,15 @@ const resume = [`\
 <span class="text-neon-red dark:text-neon-yellow">Full Stack Developer</span> at <span class="text-neon-red dark:text-neon-yellow">Toba Regency Government</span>
 `];
 
+const skills = [`\
+Go           Go Gin        PostgreSQL
+Java         Spring Boot   MySQL
+PHP          Laravel       MongoDB
+TypeScript   Next.js       C/C++
+JavaScript   React.js
+Python       Express.js
+`]
+
 const footer = [
   `<div class="flex w-full items-center justify-between"><p class="dark:text-neon-purple text-neon-purple">marceljsh</p><p class="dark:text-neon-yellow text-neon-red" style="margin-left: auto;">2024 All rights reserved</p></div>`,
 ];
@@ -69,7 +79,8 @@ export {
   projects,
   resume,
   social,
+  skills,
   template,
   theme,
-  whatis,
+  whois,
 };

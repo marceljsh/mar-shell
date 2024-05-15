@@ -8,9 +8,10 @@ import {
   resume,
   social,
   theme,
-  whatis,
+  whois,
   template,
   projects,
+  skills,
 } from "@/lib/cmd";
 
 export function cn(...inputs: string[]) {
@@ -23,14 +24,16 @@ export function command(cmd: string): string[] {
       return help;
     case "contact":
       return contact;
-    case "whatis":
-      return whatis;
+    case "whois":
+      return whois;
     case "theme":
       return theme;
     case "projects":
       return projects;
     case "social":
       return social;
+    case "skills":
+      return skills;
     case "resume":
       return resume;
     case "footer":
