@@ -20,7 +20,7 @@ export default function Page() {
         <span className='text-neon-red dark:text-neon-yellow'>Mar-Shell</span>
         , <br />A terminal-styled (Shell) portfolio built with Next.js and Tailwind CSS.
         Type <span className='text-neon-red dark:text-neon-yellow'>
-          "help"
+          &quot;help&quot;
         </span>{' '}
         to see available commands.
       </code>
