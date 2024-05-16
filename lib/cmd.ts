@@ -27,7 +27,7 @@ github        <a target="_blank" href="https://github.com/marceljsh"><span class
 linkedin      <a target="_blank" href="https://linkedin.com/in/marceljsh"><span class="text-neon-red dark:text-neon-yellow">https://linkedin.com/in/marceljsh</span></a>
 instagram     <a target="_blank" href="https://instagram.com/marceljsh"><span class="text-neon-red dark:text-neon-yellow">https://instagram.com/marceljsh</span></a>
 portfolio     <a target="_blank" href="https://marceljsh.vercel.app"><span class="text-neon-red dark:text-neon-yellow">https://marceljsh.vercel.app</span></a>`;
-const template = `Click <a href="https://github.com/marceljsh" class="text-neon-red dark:text-neon-yellow">here</a> to get the template.`;
+const template = `Click <a href="https://github.com/marceljsh/mar-shell" class="text-neon-red dark:text-neon-yellow">here</a> to get the template.`;
 const resume = `\
 -> Feb 2024 - Present
 <span class="text-neon-red dark:text-neon-yellow">Backend Java Cohort</span> at <span class="text-neon-red dark:text-neon-yellow">SYNRGY Academy</span>
