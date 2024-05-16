@@ -7,7 +7,7 @@ import Header from '@/components/cmd/header'
 import { command } from '@/lib/utils'
 
 interface OutputProps {
-  output: string[]
+  output: string
   history: string
   doneLoading: () => void
 }
@@ -18,11 +18,11 @@ const Output: React.FC<OutputProps> = ({ output, history, doneLoading }) => {
     fullText: string
   }
 
-  const [displayedLines, setDisplayedLines] = useState<DisplayLine[]>([])
+  const [displayedLine, setDisplayedLine] = useState<DisplayLine>({ text: '', fullText: '' })
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDisplayedLines(output.map(line => ({ text: '', fullText: line })))
+      setDisplayedLine({ text: '', fullText: output })
     }, 0)
 
     return () => clearTimeout(timer)
@@ -30,24 +30,23 @@ const Output: React.FC<OutputProps> = ({ output, history, doneLoading }) => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout
-    const updateLines = () => {
-      setDisplayedLines(prevLines =>
-        prevLines.map(line =>
-          line.text.length < line.fullText.length
-            ? { ...line, text: line.fullText.slice(0, line.text.length + 1) }
-            : line
-        )
-      )
+    const updateLine = () => {
+      if (displayedLine.text.length < displayedLine.fullText.length) {
+        setDisplayedLine(prevLine => ({
+          ...prevLine,
+          text: prevLine.fullText.slice(0, prevLine.text.length + 1)
+        }))
+      } else {
+        doneLoading()
+      }
     }
 
-    if (displayedLines.some(line => line.text !== line.fullText)) {
-      interval = setInterval(updateLines, 0.1)
-    } else if (displayedLines.some(line => line.text === line.fullText)) {
-      doneLoading()
+    if (displayedLine.text !== displayedLine.fullText) {
+      interval = setInterval(updateLine, 0.1)
     }
 
     return () => clearInterval(interval)
-  }, [displayedLines])
+  }, [displayedLine])
 
   const scrollToBottom = () => {
     const textarea = document.getElementById('command') as HTMLInputElement
@@ -58,7 +57,7 @@ const Output: React.FC<OutputProps> = ({ output, history, doneLoading }) => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [displayedLines])
+  }, [displayedLine])
 
   return (
     <div className='flex flex-col'>
@@ -68,13 +67,10 @@ const Output: React.FC<OutputProps> = ({ output, history, doneLoading }) => {
           {history}
         </span>
       </div>
-      {displayedLines.map((line, index) => (
-        <pre
-          key={index}
-          className='dark:text-[#32cd32] [font-size:_clamp(10px,3vw,14px)] md:pl-4 py-4'
-          dangerouslySetInnerHTML={{ __html: line.text }}
-        />
-      ))}
+      <pre
+        className='dark:text-[#32cd32] [font-size:_clamp(10px,3vw,14px)] md:pl-4 py-4'
+        dangerouslySetInnerHTML={{ __html: displayedLine.text }}
+      />
     </div>
   )
 }
@@ -86,6 +82,7 @@ const CommandPrompt: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('loading', loading)
     setCmd(event.target.value)
   }
 
@@ -131,22 +128,19 @@ const CommandPrompt: React.FC = () => {
       return
     } else if (cmd === 'clear' || cmd === 'cls') {
       handleClear()
-      return setLoading(false)
     } else if (cmd === 'exit') {
       window.close()
-      return setLoading(false)
     } else if (cmd === 'theme') {
       handleThemeChange()
-      return setLoading(false)
     } else if (cmd === 'contact') {
       handleCopyEmail()
-      return setLoading(false)
     } else {
       const output = command(cmd)
       setOutputs(prevOutputs => [...prevOutputs, output])
       setHistory([...history, cmd])
       setCmd('')
     }
+    setLoading(false)
   }
 
   return (

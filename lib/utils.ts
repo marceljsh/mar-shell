@@ -18,7 +18,7 @@ export function cn(...inputs: string[]) {
   return twMerge(clsx(inputs));
 }
 
-export function command(cmd: string): string[] {
+export function command(cmd: string): string {
   switch (cmd.toLowerCase()) {
     case "help":
       return help;
@@ -47,9 +47,9 @@ export function command(cmd: string): string[] {
     case "yo":
       return hello;
     default:
-      return [
-        `Command not found.
-Type <span class="text-neon-red dark:text-neon-yellow">"help"</span> for available commands.`,
-      ];
+      return `\
+Command not found.
+Type <span class="text-neon-red dark:text-neon-yellow">"help"</span> for available commands.
+`;
   }
 }
